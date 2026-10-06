@@ -1,0 +1,9 @@
+{
+  "name": "@relay/config",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "./typescript/base.json": "./typescript/base.json"
+  }
+}
