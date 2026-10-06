@@ -33,13 +33,12 @@ Run `pnpm check` before requesting review. Fix failures instead of weakening
 rules or bypassing checks. For UI changes, also verify responsive layouts,
 keyboard navigation, visible focus, and both themes.
 
-Phase 1 has no test suites. The root `test` command runs available workspace test
-scripts and currently has none to dispatch. Introduce a test runner with the
-first meaningful behavior tests. Priorities include editor serialization,
-formatting commands, keyboard interaction, slash command filtering/navigation,
-and persistence failure/recovery. Colocate focused behavior tests with their
-features; add browser tests where DOM selection and real keyboard behavior matter.
-Do not treat a successful empty test dispatch as evidence of coverage.
+The root `test` command dispatches to the web application's Vitest/jsdom suite.
+Editor tests live alongside the feature and exercise real editor instances,
+content changes, history, and serialization. Add focused tests with each feature;
+priorities include formatting commands, keyboard interaction, slash command
+filtering/navigation, and persistence failure/recovery. Use browser checks where
+DOM selection and real keyboard/layout behavior matter.
 
 ## Changes and review
 

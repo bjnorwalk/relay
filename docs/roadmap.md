@@ -13,8 +13,8 @@ Relay is in early development. Milestones define scope, not promised release dat
 - [x] Editor engine ADR and frontend CI configuration.
 - [x] Minimal page suitable for production build validation.
 
-CI execution on GitHub still requires pushing the repository. No editor UI or
-editor behavior is included in this phase.
+The foundation is pushed to GitHub with frontend CI. No editor UI or editor
+behavior is included in this phase.
 
 ### Phase 2: Application shell — complete
 
@@ -38,16 +38,30 @@ the status area does not claim that content is saved.
 The shell does not include Tiptap, persistence, comments, presence, or backend
 integration. Validate its responsive and keyboard behavior before Phase 3.
 
-### Phase 3: Editor foundation — next issue
+### Phase 3A: Tiptap editor foundation — complete
 
 **Issue: Integrate the single-user Tiptap editor foundation.**
 
-Integrate Tiptap in `features/editor` with paragraphs, headings, bold, italic,
-inline code, code blocks, blockquotes, bullet/ordered/task lists, links, and
-undo/redo. Define serialization and extension boundaries. Add meaningful tests
-for serialization and formatting commands, then a contextual selection toolbar,
-markdown shortcuts where sensible, and keyboard behavior. Stabilize editor focus
-and selection handling before adding slash commands.
+Implemented an empty editable document body in `features/editor`, with a
+centralized StarterKit configuration, placeholder, document typography, narrow
+client boundary, and focused state/history/serialization tests. The title is
+separate. Content lives only in the editor instance and resets on refresh.
+
+### Phase 3B: Rich-text formatting controls — next issue
+
+**Issue: Add accessible formatting controls to the single-user editor.**
+
+Add explicit controls for the base schema with predictable selection/focus
+handling and meaningful command tests. Introduce links and task lists only with
+their corresponding behavior. Do not add persistence or collaboration.
+
+### Phase 3C: Contextual selection toolbar
+
+Introduce selection tools after formatting commands are stable.
+
+### Phase 3D: Keyboard behavior and shortcuts
+
+Refine and test keyboard interaction before adding the slash command system.
 
 ### Phase 4: Slash commands
 

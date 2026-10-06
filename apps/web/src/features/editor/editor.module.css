@@ -1,0 +1,140 @@
+.editor {
+  min-height: 8lh;
+  font-size: var(--text-document-body);
+  line-height: 1.75;
+}
+
+.editor :global(.tiptap) {
+  position: relative;
+  min-height: 8lh;
+  overflow-wrap: anywhere;
+  caret-color: var(--text-primary);
+  white-space: pre-wrap;
+}
+
+.editor :global(.tiptap):focus {
+  outline: none;
+}
+
+.editor :global(.tiptap):focus-visible::after {
+  position: absolute;
+  top: 0;
+  left: calc(-1 * var(--space-3));
+  width: 2px;
+  height: 1.75em;
+  background: var(--focus-ring);
+  content: '';
+  pointer-events: none;
+}
+
+.editor :global(.tiptap) > :first-child {
+  margin-top: 0;
+}
+
+.editor :global(.tiptap) > :last-child {
+  margin-bottom: 0;
+}
+
+.editor p {
+  margin-block: 0 var(--space-4);
+}
+
+.editor :global(p.is-editor-empty):first-child::before {
+  float: left;
+  height: 0;
+  color: var(--text-secondary);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+.editor :is(h2, h3, h4) {
+  margin-block: var(--space-8) var(--space-3);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+}
+
+.editor h2 {
+  font-size: 1.5em;
+}
+
+.editor h3 {
+  font-size: 1.25em;
+}
+
+.editor h4 {
+  font-size: 1em;
+}
+
+.editor blockquote {
+  padding-left: var(--space-5);
+  margin: var(--space-6) 0;
+  border-left: 2px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.editor :is(ul, ol) {
+  padding-left: var(--space-6);
+  margin-block: var(--space-4);
+}
+
+.editor li {
+  padding-left: var(--space-1);
+  margin-block: var(--space-1);
+}
+
+.editor li p {
+  margin-block: 0;
+}
+
+.editor code {
+  padding: 0.1em var(--space-1);
+  border-radius: var(--radius-control);
+  background: var(--surface-hover);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.875em;
+}
+
+.editor pre {
+  padding: var(--space-4);
+  margin-block: var(--space-6);
+  overflow-x: auto;
+  border-radius: var(--radius-control);
+  background: var(--surface-hover);
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.editor pre code {
+  padding: 0;
+  background: transparent;
+}
+
+.editor hr {
+  margin-block: var(--space-8);
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.editor :global(.ProseMirror-selectednode) {
+  outline: 2px solid var(--focus-ring);
+}
+
+.editor :global(.ProseMirror-gapcursor) {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+}
+
+.editor :global(.ProseMirror-gapcursor)::after {
+  position: absolute;
+  top: -2px;
+  display: block;
+  width: var(--space-5);
+  border-top: 1px solid var(--text-primary);
+  content: '';
+}
+
+.editor :global(.tiptap-focused .ProseMirror-gapcursor) {
+  display: block;
+}
