@@ -16,7 +16,7 @@ Relay is in early development. Milestones define scope, not promised release dat
 CI execution on GitHub still requires pushing the repository. No editor UI or
 editor behavior is included in this phase.
 
-### Phase 2: Application shell — next issue
+### Phase 2: Application shell — complete
 
 **Issue: Build the Relay application/editor shell.**
 
@@ -30,10 +30,17 @@ Acceptance criteria:
   indicators that have no implemented operation behind them.
 - Keep feature ownership clear and pass formatting, lint, typecheck, and build.
 
+Implemented a static document preview, responsive workspace navigation, sidebar
+collapse, semantic tokens, self-hosted typography, and system/light/dark themes.
+Sharing, sample document switching, Home, and Commands are explicitly disabled;
+the status area does not claim that content is saved.
+
 The shell does not include Tiptap, persistence, comments, presence, or backend
 integration. Validate its responsive and keyboard behavior before Phase 3.
 
-### Phase 3: Editor foundation
+### Phase 3: Editor foundation — next issue
+
+**Issue: Integrate the single-user Tiptap editor foundation.**
 
 Integrate Tiptap in `features/editor` with paragraphs, headings, bold, italic,
 inline code, code blocks, blockquotes, bullet/ordered/task lists, links, and

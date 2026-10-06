@@ -2,9 +2,9 @@
 
 ## Status
 
-This document records the direction for Phase 2. Phase 1 includes only a minimal
-CSS baseline; no application shell, token palette, themes, or shared component
-library has been implemented.
+Phase 2 implements the workspace shell, semantic tokens, responsive layout, and
+system/light/dark appearance. Shared primitives remain local to the application;
+there is no shared component library yet.
 
 ## Principles
 
@@ -29,27 +29,48 @@ differentiated document surface, near-black primary text, and neutral secondary
 text. Dark mode should use near-black chrome, slightly raised document surfaces,
 and warm light text. Both should share one restrained accent system.
 
-Introduce CSS custom properties in `apps/web/src/styles` during Phase 2. Prefer
-semantic tokens such as `--surface-app`, `--surface-document`, `--text-primary`,
-`--text-secondary`, `--border-subtle`, `--accent`, and `--focus-ring`. Add spacing,
-type, width, and radius tokens only when needed. Components should consume
-semantic tokens instead of repeating raw palette values.
+CSS custom properties live in `apps/web/src/styles/tokens.css`. The shell uses
+`--surface-app`, `--surface-sidebar`, `--surface-document`, `--surface-hover`,
+`--surface-selected`, `--text-primary`, `--text-secondary`, `--text-disabled`,
+`--border-subtle`, `--accent`, and `--focus-ring`. Spacing, typography, control
+radius, layout dimensions, and transition timing also use tokens. There are no
+decorative shadows or elevations.
 
-Define both themes through the same token names. Respect the system preference
-initially and specify explicit theme selection when implementing the shell.
-Verify text, focus indicators, and essential control boundaries in both themes.
+Both palettes use the same token names through CSS `light-dark()` and
+`color-scheme`. System appearance is the default, including before hydration;
+the native Appearance select can explicitly choose light or dark. Selection
+updates `data-theme` on the root element without storage or an initialization
+script. Refresh returns to system appearance. This requires a modern browser
+with `light-dark()` support. Verify text and focus in both palettes.
 
 ## Typography and layout
 
-Use Geist or a comparably clean sans-serif for interface text. Choose document
-typography for sustained reading: a comfortable line height, controlled line
-length, and a distinct heading hierarchy. Font loading should not make production
-builds depend on fetching fonts from an external service.
+Interface text uses self-hosted Geist Variable from the font package, with a
+system sans-serif fallback. The document title uses Georgia at regular weight;
+body text uses Geist with a generous line height. The writing column has a 40rem
+maximum width. Font loading and production builds need no external font service.
 
 The shell will contain restrained navigation, a document header, the document
 canvas, and a subtle status area. On small screens, prioritize reading/editing
 space and make navigation accessible without obscuring document content. Avoid
 horizontal overflow and keep toolbar targets usable with touch and keyboard.
+Below 48rem, the sidebar becomes a compact navigation/appearance row; sample
+documents are omitted. Sidebar collapse works at all sizes without an overlay
+or focus trap. Header and status remain separate from the scrolling document.
+
+## Current shell behavior
+
+Home, sample document rows, Share, and Commands are native disabled buttons with
+explanatory labels or titles. Documents links to the current document landmark.
+The avatar is explicitly a user placeholder, without a presence indicator. The
+footer says **Preview · Not saved**; it does not claim persistence. The canvas
+contains static text and has no caret, text input, or contenteditable region.
+
+Sidebar collapse preserves the toggle's focus and removes hidden navigation from
+keyboard traversal. The skip link focuses the document landmark. The native
+Appearance select preserves platform keyboard behavior. Focus rings are visible,
+hover/active states apply only to enabled controls, and reduced-motion preference
+removes the short color transitions.
 
 ## Interaction and accessibility
 

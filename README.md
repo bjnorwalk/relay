@@ -9,9 +9,9 @@ branching are first-class concepts rather than secondary tools.
 
 Early development. Current milestone: **Editor Foundation**.
 
-Phase 1 establishes the repository and frontend toolchain. The application
-currently renders a minimal development page. Rich-text editing, local document
-storage, and real-time collaboration are not implemented yet.
+Phase 2 establishes the application shell: workspace navigation, a document
+preview, responsive layout, and light/dark appearance. Rich-text editing, local
+document storage, and real-time collaboration are not implemented yet.
 
 ## Project overview
 
@@ -31,6 +31,8 @@ and a carefully designed interface.
 ## Current capabilities
 
 - Next.js App Router application with React and strict TypeScript.
+- Responsive workspace shell with sidebar collapse and system/light/dark themes.
+- Static document preview with explicitly unavailable sharing and commands.
 - pnpm workspace and a shared TypeScript configuration package.
 - ESLint, Prettier, and frontend CI checks.
 - Architecture, design direction, roadmap, and an editor engine decision record.
@@ -53,7 +55,8 @@ relay/
 ├── apps/web/                  # Next.js application
 │   └── src/
 │       ├── app/               # Routes and root layout
-│       └── styles/            # Global baseline styles
+│       ├── features/          # Workspace shell and document canvas
+│       └── styles/            # Semantic tokens and global styles
 ├── packages/config/           # Shared TypeScript settings
 ├── docs/
 │   ├── architecture.md
@@ -66,10 +69,9 @@ relay/
 └── Makefile
 ```
 
-Create `src/features/` as product functionality arrives. `packages/ui`,
-`packages/types`, and `services/realtime` will be added when there is meaningful
-shared code or service code to place in them. Empty scaffolding is intentionally
-omitted.
+`packages/ui`, `packages/types`, and `services/realtime` will be added when there
+is meaningful shared code or service code to place in them. Empty scaffolding
+is intentionally omitted.
 
 ## Development
 
@@ -108,7 +110,7 @@ do not commit populated `.env` files.
 The Makefile provides equivalent convenience targets, including `make check`.
 The pnpm scripts are the source of truth.
 
-**Tests:** Phase 1 has no behavior test suites. `pnpm test` currently dispatches
+**Tests:** There are no committed behavior test suites yet. `pnpm test` dispatches
 to no suites; it does not demonstrate test coverage. Editor behavior tests and
 browser keyboard tests will be added alongside the relevant features. CI already
 invokes the workspace test dispatcher.

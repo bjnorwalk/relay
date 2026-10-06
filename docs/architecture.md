@@ -2,9 +2,9 @@
 
 ## Current boundary
 
-Milestone 1, Phase 1 contains a Next.js App Router application and repository
-tooling. It has no document editor, data storage, authentication, or dedicated
-backend service. The page is a minimal bootstrapping entry point.
+Milestone 1, Phase 2 contains a Next.js App Router application, a mostly static
+workspace shell, and repository tooling. It has no document editor, data storage,
+authentication, or dedicated backend service.
 
 The pnpm workspace includes `apps/*` and `packages/*`. Packages are private and
 internal references use `workspace:*` so local dependencies cannot accidentally
@@ -28,6 +28,12 @@ supported range.
 compose feature code rather than own editor logic. Use Server Components by
 default and introduce client boundaries for interactive behavior, including the
 future editor. Global baseline styles live in `src/styles`.
+
+The route composes `features/workspaces/WorkspaceShell` around a server-rendered
+`features/documents/DocumentCanvas`. Shell components and their CSS module stay
+in the workspace feature. Only sidebar visibility and appearance require local
+client state. Neither preference nor document content is persisted. Geist is
+self-hosted through its font package; Lucide supplies the outline icons.
 
 Create feature directories only as their behavior arrives:
 

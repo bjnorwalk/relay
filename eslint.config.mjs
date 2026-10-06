@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTypescript from 'eslint-config-next/typescript';
 import prettier from 'eslint-config-prettier/flat';
+import webPackage from './apps/web/package.json' with { type: 'json' };
 
 export default defineConfig([
   ...nextVitals,
@@ -15,6 +16,9 @@ export default defineConfig([
   },
   {
     settings: {
+      react: {
+        version: webPackage.dependencies.react,
+      },
       next: {
         rootDir: 'apps/web/',
       },

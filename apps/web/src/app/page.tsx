@@ -1,8 +1,12 @@
+import { DocumentCanvas } from '@/features/documents/document-canvas';
+import { WorkspaceShell } from '@/features/workspaces/workspace-shell';
+
+const DOCUMENT_TITLE = 'Untitled document';
+
 export default function HomePage() {
   return (
-    <main>
-      <h1>Relay</h1>
-      <p>Editor Foundation · Early development</p>
-    </main>
+    <WorkspaceShell title={DOCUMENT_TITLE}>
+      <DocumentCanvas title={DOCUMENT_TITLE} />
+    </WorkspaceShell>
   );
 }
