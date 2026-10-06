@@ -47,15 +47,18 @@ centralized StarterKit configuration, placeholder, document typography, narrow
 client boundary, and focused state/history/serialization tests. The title is
 separate. Content lives only in the editor instance and resets on refresh.
 
-### Phase 3B: Rich-text formatting controls — next issue
+### Phase 3B: Rich-text formatting system — complete
 
 **Issue: Add accessible formatting controls to the single-user editor.**
 
-Add explicit controls for the base schema with predictable selection/focus
-handling and meaningful command tests. Introduce links and task lists only with
-their corresponding behavior. Do not add persistence or collaboration.
+Implemented reusable commands, a compact formatting row, paragraph/H1–H3 styles,
+inline marks, list/quote/code controls, horizontal rules, and undo/redo. Controls
+derive active and disabled state from Tiptap. Command and representative control
+tests cover selection state, serialization, history, and incompatible formatting.
+Safe link schema support is enabled; link editing UI and task lists are deferred.
+Content remains session-only.
 
-### Phase 3C: Contextual selection toolbar
+### Phase 3C: Contextual selection toolbar — next issue
 
 Introduce selection tools after formatting commands are stable.
 

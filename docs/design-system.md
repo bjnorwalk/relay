@@ -2,8 +2,9 @@
 
 ## Status
 
-Phase 3A adds editable document typography to the Phase 2 workspace shell,
-semantic tokens, responsive layout, and system/light/dark appearance. Shared
+Phase 3B adds a compact formatting row and editable document typography to the
+Phase 2 workspace shell, semantic tokens, responsive layout, and system/light/dark
+appearance. Shared
 primitives remain local to the application; there is no shared component library
 yet.
 
@@ -67,14 +68,25 @@ The avatar is explicitly a user placeholder, without a presence indicator. The
 footer says **Session only · Not saved**; it does not claim persistence. The
 document title remains a static H1 above the editable body.
 
-The editor inherits the document body typography and readable column. H2–H4
+The editor inherits the document body typography and readable column. H1–H3
 use restrained sans-serif headings; quotes use a subtle left rule; code uses a
 neutral surface and monospace type. Lists retain normal indentation and code
 blocks scroll within the column. An empty paragraph shows **Start writing…**.
 The writing surface has no input border or surrounding card. Keyboard focus
 uses a short accent rule in the left gutter rather than an outline around the
 whole editor; other controls retain the global focus outline. Text selection
-uses the existing palette.
+uses the existing palette. Body H1 is intentionally smaller than the separate
+serif document title.
+
+The formatting row sits below the title and above the body, with a single subtle
+separator and no enclosing card. A native text-style select and grouped Lucide
+buttons wrap within the document width on narrow screens. Buttons expose their
+names, pressed state, and actual command availability. Native title hints label
+icon controls without a separate tooltip dependency. Tab traverses enabled
+controls normally; Enter/Space activates buttons and returns focus to the editor.
+The row displays no platform-specific shortcut labels. Standard editor shortcuts
+remain supplied by Tiptap. Links use the accent and an underline; link editing UI
+and floating selection controls are deferred.
 
 Sidebar collapse preserves the toggle's focus and removes hidden navigation from
 keyboard traversal. The skip link focuses the document landmark. The native
