@@ -78,10 +78,24 @@ describe('document editor', () => {
     expect(editor.getJSON()).toEqual(serialized);
   });
 
-  it('keeps links, underline, and unsupported media out of the document schema', () => {
+  it('preserves safe links while excluding underline and unsupported media', () => {
     editor.commands.setContent(
       '<p><a href="https://example.com">Reference</a> <u>plain</u><img src="example.png"></p>',
     );
-    expect(editor.getHTML()).toBe('<p>Reference plain</p>');
+    expect(editor.getHTML()).toContain('href="https://example.com"');
+    expect(editor.getHTML()).not.toMatch(/<u>|<img/);
+    expect(editor.getText()).toBe('Reference plain');
+  });
+
+  it('rejects unsafe links in imported content and commands', () => {
+    editor.commands.setContent(
+      '<p><a href="javascript:alert(1)">Reference</a></p>',
+    );
+    expect(editor.getHTML()).toBe('<p>Reference</p>');
+    editor.commands.selectAll();
+    expect(editor.commands.setLink({ href: 'javascript:alert(1)' })).toBe(
+      false,
+    );
+    expect(editor.isActive('link')).toBe(false);
   });
 });

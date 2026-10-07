@@ -5,9 +5,8 @@ import StarterKit from '@tiptap/starter-kit';
 export const editorOptions: Partial<EditorOptions> = {
   extensions: [
     StarterKit.configure({
-      // The document title owns H1; links and underline belong to later phases.
-      heading: { levels: [2, 3, 4] },
-      link: false,
+      heading: { levels: [1, 2, 3] },
+      link: { openOnClick: false, autolink: false, linkOnPaste: false },
       underline: false,
       dropcursor: { color: 'var(--accent)' },
     }),

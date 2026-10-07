@@ -2,7 +2,7 @@
 
 ## Current boundary
 
-Milestone 1, Phase 3A contains a Next.js App Router application, workspace shell,
+Milestone 1, Phase 3B contains a Next.js App Router application, workspace shell,
 and single-user Tiptap editor foundation. It has no document storage,
 authentication, or dedicated backend service.
 
@@ -27,7 +27,7 @@ supported range.
 `apps/web/src/app` owns routing, metadata, and the root layout. Routes should
 compose feature code rather than own editor logic. Use Server Components by
 default and introduce client boundaries for interactive behavior, including the
-future editor. Global baseline styles live in `src/styles`.
+editor. Global baseline styles live in `src/styles`.
 
 The route composes `features/workspaces/WorkspaceShell` around a server-rendered
 `features/documents/DocumentCanvas`. Shell components and their CSS module stay
@@ -61,10 +61,12 @@ server-rendered document canvas. `useEditor` manages instance creation/cleanup;
 There is no application-wide document state or custom editor lifecycle wrapper.
 
 `editor-config.ts` centralizes the initial JSON document, extensions, and
-accessible editor attributes. StarterKit supplies paragraphs, H2–H4, bold,
+accessible editor attributes. StarterKit supplies paragraphs, H1–H3, bold,
 italic, strike, inline code, code blocks, blockquotes, bullet/ordered lists, hard
-breaks, horizontal rules, and undo/redo. H1 belongs to the separate document
-title. StarterKit's link and underline extensions are disabled. Placeholder
+breaks, horizontal rules, and undo/redo. The document title stays separate from
+body headings. Underline remains disabled. Link support uses StarterKit's safe
+URI validation, with navigation, automatic linking, and plain-URL paste linking
+disabled; an intentional link-editing interaction is deferred. Placeholder
 comes from `@tiptap/extensions`, which StarterKit already uses. There are no
 custom nodes, extension registries, or collaboration extensions.
 
@@ -74,8 +76,17 @@ schema version, before accepting saved content. The exact persistence types are
 deferred until implementation. Render content through the editor/schema rather
 than inserting untrusted HTML.
 
-Formatting controls, links, and task lists follow this foundation. Selection
-tools follow stable command behavior; slash commands follow a stable base editor.
+`formatting.ts` owns reusable actions and text-style changes. Its state selector
+reads active marks/blocks and command availability directly from the editor;
+capability checks do not dispatch document changes. `FormattingToolbar` alone
+subscribes through `useEditorState`, so cursor movement does not rerender the
+workspace or editor content. Pointer controls preserve selection and commands
+restore editor focus. The native text-style select keeps platform keyboard
+behavior. Future selection tools can reuse the same commands and state selector
+without depending on the current control row.
+
+Task lists and link editing UI are deferred. Selection tools follow stable
+command behavior; slash commands follow a stable base editor.
 
 ## Persistence direction
 
@@ -116,7 +127,8 @@ in the standard Next.js setup, while application code remains strictly checked.
 
 CI checks formatting, lint, types, available workspace tests, and production
 build. Vitest/jsdom tests exercise initial editor state, content updates,
-undo/redo, structured JSON round-tripping, and exclusion of unsupported content.
+undo/redo, formatting commands/control state, structured JSON round-tripping,
+safe link handling, and exclusion of unsupported content.
 Browser checks verify rendering, hydration, selection/keyboard behavior, themes,
 and layout; jsdom is not a substitute for browser selection/layout testing.
 
