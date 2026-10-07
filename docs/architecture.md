@@ -1,150 +1,86 @@
 # Architecture
 
-## Current boundary
+## Current system
 
-Milestone 1, Phase 3C contains a Next.js App Router application, workspace
-shell, and single-user Tiptap editor foundation. It has no document storage,
-authentication, or dedicated backend service.
+Relay is a Next.js App Router application with a single-user Tiptap editor.
+Document content stays in the editor instance. Refreshing the page clears it.
+There is no document store, authentication, or dedicated backend service.
 
-The pnpm workspace includes `apps/*` and `packages/*`. Packages are private and
-internal references use `workspace:*` so local dependencies cannot accidentally
-resolve from the registry. Direct dependency versions and the package manager
-are pinned; `pnpm-lock.yaml` records the resolved graph. CI uses a frozen install.
+The pnpm workspace contains `apps/web` and `packages/config`. Internal packages
+use `workspace:*`, dependency versions are pinned, and CI installs from the
+lockfile. The config package shares TypeScript settings. ESLint and Prettier stay
+at the root because one policy covers the current repository.
 
-`packages/config` exposes shared TypeScript compiler settings. ESLint and
-Prettier live at the root because they currently serve one repository-wide
-policy; no custom configuration framework or task orchestrator is needed.
+## Frontend boundaries
 
-ESLint 9.39.5 is pinned because the React, accessibility, and import plugins in
-the current Next.js configuration declare support through ESLint 9. ESLint 9 is
-upstream end-of-support; move to ESLint 10 when that plugin chain declares
-compatibility. Keep strict peer dependency checking enabled rather than
-overriding the incompatibility. TypeScript 5.9.3 stays within the lint parser's
-supported range.
+| Location              | Responsibility                                   |
+| --------------------- | ------------------------------------------------ |
+| `src/app`             | Routes, metadata, and root layout                |
+| `features/workspaces` | Sidebar, header, status, and appearance          |
+| `features/documents`  | Document canvas and title                        |
+| `features/editor`     | Editor setup, formatting, and selection controls |
+| `src/styles`          | Tokens and global styles                         |
 
-## Web application
+The page composes `WorkspaceShell` around a server-rendered `DocumentCanvas`.
+Sidebar and theme state stay local to their controls. Neither preferences nor
+content are persisted. Geist fonts are self-hosted and Lucide supplies icons.
+New feature directories and shared packages are added when they have code to own.
 
-`apps/web/src/app` owns routing, metadata, and the root layout. Routes should
-compose feature code rather than own editor logic. Use Server Components by
-default and introduce client boundaries for interactive behavior, including the
-editor. Global baseline styles live in `src/styles`.
+## Editor state
 
-The route composes `features/workspaces/WorkspaceShell` around a server-rendered
-`features/documents/DocumentCanvas`. Shell components and their CSS module stay
-in the workspace feature. Sidebar visibility and appearance use local client
-state; the editor owns its own state. Neither preferences nor content are
-persisted. Geist is self-hosted through its font package; Lucide supplies the
-outline icons.
+[ADR 0001](adr/0001-editor-engine.md) explains the choice of Tiptap and ProseMirror.
+`editor.tsx` is the editor's client boundary; the document title stays outside it.
+`useEditor` creates and cleans up the instance. `immediatelyRender: false` delays
+initialization until after hydration. `shouldRerenderOnTransaction: false` keeps
+keystrokes from rerendering the editor's React wrapper.
 
-Create feature directories only as their behavior arrives:
+`editor-config.ts` defines the initial JSON document, accessible attributes, and
+extensions. StarterKit provides the block types, inline marks, and undo/redo.
+Headings are limited to H1–H3 and underline is disabled. Link navigation,
+automatic linking, and plain-URL paste linking are disabled. Links are applied
+through a URL form that accepts http, https, and mailto addresses. Placeholder
+comes from the existing `@tiptap/extensions` package.
 
-| Boundary              | Intended responsibility                                 |
-| --------------------- | ------------------------------------------------------- |
-| `features/editor`     | Editor lifecycle, extensions, commands, selection tools |
-| `features/documents`  | Document identity, metadata, and local persistence      |
-| `features/workspaces` | Workspace navigation and document organization          |
-| `features/history`    | History presentation, comparison, and restoration       |
-| `features/comments`   | Review threads and comment interaction                  |
-| `features/presence`   | Collaborator presence and remote selection rendering    |
+`formatting.ts` contains commands shared by both toolbars. Active and disabled
+states come from the editor through `useEditorState`; they are not copied into
+application state. The document row holds block and history commands. The
+selection menu holds inline formatting and link editing. Commands preserve the
+selection and return focus to the editor.
 
-History, comments, and presence are outside Milestone 1. Generic components,
-hooks, and libraries should be extracted only when their responsibility is
-actually shared. Do not create empty feature modules or generic service layers.
+Tiptap's `BubbleMenu` manages the selection menu plugin. The menu excludes empty,
+whitespace-only, node, read-only, and code-block selections. Focus can move into
+its controls without losing the selection. Escape dismisses it until the
+selection changes. Floating UI positions against the scrolling document rather
+than the window, shifts or flips near edges, and hides an offscreen selection.
+Opening the URL form requests a new position because the menu's size changes.
 
-## Editor direction
+## Storage and synchronization
 
-[ADR 0001](adr/0001-editor-engine.md) selects Tiptap, built on ProseMirror.
-`features/editor/editor.tsx` is the editor's client boundary, mounted inside the
-server-rendered document canvas. `useEditor` manages instance creation/cleanup;
-`immediatelyRender: false` defers initialization until after hydration, and
-`shouldRerenderOnTransaction: false` avoids React rerenders for each keystroke.
-There is no application-wide document state or custom editor lifecycle wrapper.
+The editor serializes content as structured JSON. When local storage is added,
+the document feature will own its storage format and schema version. Reads need
+to handle malformed data, and save status needs to reflect actual write results.
+Content should pass through the editor schema rather than untrusted HTML.
 
-`editor-config.ts` centralizes the initial JSON document, extensions, and
-accessible editor attributes. StarterKit supplies paragraphs, H1–H3, bold,
-italic, strike, inline code, code blocks, blockquotes, bullet/ordered lists,
-hard breaks, horizontal rules, and undo/redo. The document title stays separate
-from body headings. Underline remains disabled. Link support uses StarterKit's
-safe URI validation, with navigation, automatic linking, and plain-URL paste
-linking disabled. A selection URL form applies, updates, and removes links
-through the shared commands; it accepts explicit http, https, and mailto
-addresses. Placeholder comes from `@tiptap/extensions`, which StarterKit already
-uses. There are no custom nodes, extension registries, or collaboration
-extensions.
+Local storage will not solve synchronization. Concurrent changes, reconnection,
+and server acknowledgement need separate designs and tests.
 
-Document content uses the editor's structured JSON representation. When
-persistence arrives, define and validate the storage envelope, including its
-schema version, before accepting saved content. The exact persistence types are
-deferred until implementation. Render content through the editor/schema rather
-than inserting untrusted HTML.
+A future Go service is planned for `services/realtime`, using WebSockets. Yjs is
+the intended synchronization direction, but interoperability with Go needs an
+explicit design and a small working test before committing to a protocol. Redis,
+PostgreSQL, and object storage are candidates for later infrastructure; their
+roles have not been decided.
 
-`formatting.ts` owns reusable actions and text-style changes. Its state selector
-reads active marks/blocks and command availability directly from the editor;
-capability checks do not dispatch document changes. Both formatting surfaces
-subscribe through `useEditorState`, so cursor movement does not rerender the
-workspace or editor content. Pointer controls preserve selection and commands
-restore editor focus. The native text-style select keeps platform keyboard
-behavior. `FormattingToolbar` retains block/history controls. `SelectionToolbar`
-reuses the same commands and state for inline controls and link editing.
+Shared UI and protocol packages will be added when more than one consumer needs
+them. Cross-language messages will need runtime validation and versioning, not
+just TypeScript types.
 
-The selection toolbar uses Tiptap React's supported `BubbleMenu` integration,
-already included in the dependency graph. Its eligibility policy excludes
-collapsed, whitespace-only, node, read-only, and code-block selections. Focus
-may move into the menu without losing the document selection. Escape dismisses
-the current selection until it changes; leaving the editor/menu hides the tools.
-Floating UI positions against the document landmark, which scrolls independently
-of the window, with offset, flip, shift, and offscreen-reference hiding. The URL
-form requests a position update when its size changes. Tiptap owns plugin
-registration/cleanup; local UI state only tracks form visibility and dismissal.
+## Validation
 
-Task lists and slash commands remain deferred.
+TypeScript enables strict checking, unchecked-index protection, and exact
+optional properties. ESLint rejects explicit `any`. CI runs formatting, lint,
+typecheck, Vitest tests, and the production build with a frozen install.
 
-## Persistence direction
-
-Phase 5 will add simple browser-local document persistence. Keep it at the
-document feature boundary, handle unavailable storage and malformed saved
-content explicitly, and make save status reflect actual persistence results.
-Choose the storage mechanism with the initial document model; a full repository
-abstraction is unnecessary now.
-
-Local persistence does not imply offline synchronization. Reconnection,
-concurrent changes, durable server acknowledgement, and conflict handling need
-separate designs and tests in later milestones.
-
-## Future service boundaries
-
-The planned real-time service will live in `services/realtime` and use Go with
-WebSocket transport. Yjs is the intended synchronization direction, but its
-protocol, interoperability with Go, ownership of document state, and recovery
-semantics require a later ADR and an interoperability spike before implementation.
-Do not assume that a Go service directly implements Yjs document semantics.
-
-PostgreSQL, Redis, and object storage are future candidates for durable data,
-ephemeral coordination, and document artifacts. Their roles, deployment topology,
-and failure behavior remain open decisions. No dependencies, clients, schemas,
-or Go CI are present for them.
-
-Add `packages/ui` for genuine shared UI primitives and `packages/types` for
-shared domain/protocol contracts when multiple consumers need them. TypeScript
-types alone cannot validate a WebSocket payload or establish a cross-language
-contract; runtime validation and protocol versioning will need explicit design.
-
-## Quality and measurement
-
-TypeScript uses strict checking, unchecked-index protection, and exact optional
-properties. ESLint enforces the Next.js recommendations and rejects explicit
-`any`; Prettier owns formatting. Third-party declaration checks are skipped as
-in the standard Next.js setup, while application code remains strictly checked.
-
-CI checks formatting, lint, types, available workspace tests, and production
-build. Vitest/jsdom tests exercise initial editor state, content updates,
-undo/redo, formatting commands/control state, structured JSON round-tripping,
-safe link handling, selection eligibility/dismissal, and exclusion of
-unsupported content. Browser checks verify rendering, hydration,
-selection/keyboard behavior, themes, and layout; jsdom is not a substitute for
-browser selection/layout testing.
-
-Future performance work will measure editor responsiveness, initial load,
-propagation latency, concurrent connections, reconstruction time, offline
-recovery, snapshot size, and memory per connection. No benchmarks or performance
-claims exist yet.
+Tests cover editor content, formatting state, links, selection eligibility,
+dismissal, undo/redo, and JSON round-tripping. Browser checks cover native
+selection, keyboard focus, hydration, scrolling, themes, and layout. No
+performance benchmarks have been published yet.

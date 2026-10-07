@@ -27,12 +27,3 @@ Thumbs.db
 .idea/
 .vscode/
 .vercel/
-.codex/
-.agents/
-.claude/
-AGENTS.md
-CLAUDE.md
-.cursor/
-.windsurf/
-.continue/
-.aider*

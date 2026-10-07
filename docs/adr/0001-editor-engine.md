@@ -4,54 +4,45 @@
 
 ## Context
 
-Relay needs structured rich-text editing, reliable selection and undo behavior,
-custom block commands, and full control over presentation. Later work will
-explore real-time coauthoring and document evolution. Implementing an editing
-engine from browser primitives would divert effort from those product and
-systems concerns.
-
-The first milestone is single-user editing. Selecting an engine now clarifies
-the feature boundary without introducing synchronization infrastructure.
+Relay needs structured text, selection, undo/redo, and block commands. Building
+these directly on browser editing primitives would take time away from document
+review and synchronization work. The first milestone is a single-user editor.
 
 ## Decision
 
-Use the open-source Tiptap editor, built on ProseMirror, with React integration.
-Install it in Milestone 1, Phase 3. Keep editor lifecycle, extensions, and commands
-inside `apps/web/src/features/editor` and add only extensions required by the
-initial editing scope.
+Use Tiptap over ProseMirror with React integration. Keep editor lifecycle,
+extensions, and commands in `apps/web/src/features/editor`. Add extensions as
+their behavior is needed.
 
-Use structured editor JSON for document content. Define schema/version handling
-when persistence is implemented. Keep document identity and storage separate
-from editor instance state. The decision does not include hosted editor services,
-paid extensions, or a collaboration provider.
+Use structured editor JSON for content. Document identity and storage remain
+separate from the editor instance. Define schema versions when persistence is
+introduced. No hosted editor service or collaboration provider is part of this
+decision.
 
 ## Rationale
 
-Tiptap provides a headless extension and command API over ProseMirror while
-allowing Relay to own the entire interface. ProseMirror's document schema,
-transactions, and selections provide a foundation for structured editing.
-Tiptap also offers a path to later Yjs integration, which must be evaluated
-separately with the planned service architecture.
+Tiptap supplies commands and extensions while leaving the interface to Relay.
+ProseMirror provides the document schema, transactions, selections, and history.
+This lets the project start with normal editing behavior and add document-specific
+controls without owning the entire editing engine.
+
+Tiptap also has a path to Yjs integration. That will need a separate evaluation
+with the planned Go service; choosing an editor does not settle synchronization.
 
 ## Alternatives considered
 
-- **Direct ProseMirror:** Maximum control, but more integration and extension
-  plumbing for the initial editor. Revisit only if Tiptap becomes a constraint.
-- **Lexical:** A viable structured editor with a different state/extension model.
-  Tiptap better fits the selected ProseMirror direction and anticipated extension
-  work; this is not a claim that Lexical cannot support collaboration.
-- **Custom contenteditable:** Too much selection, schema, history, clipboard,
-  and cross-browser behavior to own for this project's scope.
+- **Direct ProseMirror:** more control, with more integration work at the start.
+- **Lexical:** a viable editor with a different state and extension model. Tiptap
+  fits the planned ProseMirror extension work.
+- **Custom contenteditable:** would require owning selection, clipboard, history,
+  schema, and cross-browser behavior.
 
 ## Consequences
 
-- Relay depends on Tiptap/ProseMirror APIs and must review extension compatibility
-  when updating packages.
-- Schema changes will need migration and serialization tests.
-- Interactive editor code requires an explicit client component boundary.
-- Relay owns accessible toolbars, keyboard commands, and selection/focus behavior.
-- Synchronization, offline recovery, history, branching, and merges remain
-  separate designs. Engine selection does not solve their semantics.
+Editor code needs a client component boundary. Package updates need extension
+compatibility checks, and schema changes need serialization and migration tests.
+Relay still owns accessible controls, keyboard interaction, and focus behavior.
+Storage, synchronization, history, and branching remain separate decisions.
 
 ## References
 
