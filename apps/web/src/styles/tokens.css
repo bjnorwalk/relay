@@ -4,6 +4,9 @@
   --surface-app: light-dark(#f4f3ef, #151614);
   --surface-sidebar: light-dark(#f4f3ef, #181916);
   --surface-document: light-dark(#fdfcf9, #1c1d1a);
+  --surface-raised: light-dark(#fffefb, #252722);
+  --shadow-popover: 0 4px 16px light-dark(rgb(25 28 24 / 12%), rgb(0 0 0 / 32%));
+  --layer-popover: 10;
   --surface-hover: light-dark(#eeede8, #262722);
   --surface-selected: light-dark(#e9e8e2, #2a2c25);
   --text-primary: light-dark(#252821, #edece5);

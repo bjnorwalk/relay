@@ -3,6 +3,7 @@
 import { EditorContent, useEditor } from '@tiptap/react';
 
 import { FormattingToolbar } from './formatting-toolbar';
+import { SelectionToolbar } from './selection-toolbar';
 import { editorOptions } from './editor-config';
 import styles from './editor.module.css';
 
@@ -17,6 +18,7 @@ export function DocumentEditor() {
     <>
       {editor && <FormattingToolbar editor={editor} />}
       <EditorContent editor={editor} className={styles.editor} />
+      {editor && <SelectionToolbar editor={editor} />}
     </>
   );
 }

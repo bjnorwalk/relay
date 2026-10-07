@@ -4,6 +4,18 @@ Relay is in early development. Keep contributions focused on the current
 milestone and discuss changes to major boundaries before implementing them.
 See the [roadmap](docs/roadmap.md) for scope and sequencing.
 
+## Milestone planning
+
+Use the current implementation, roadmap, architecture, design system, ADRs, and
+testing conventions together when planning work. After a phase, compare the
+roadmap with what shipped and propose the next smallest reviewable milestone.
+Minor sequencing adjustments should explain the implementation need.
+
+A proposal should state its objective, feature branch, architecture changes, UI
+behavior, tests, validation, documentation implications, suggested commit/PR
+title, and explicitly deferred functionality. Keep major phases separate and
+obtain approval before starting the next milestone.
+
 ## Local setup
 
 Use Node.js 24.x and the pnpm version pinned in `package.json`.

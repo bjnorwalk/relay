@@ -9,10 +9,10 @@ branching are first-class concepts rather than secondary tools.
 
 Early development. Current milestone: **Editor Foundation**.
 
-Phase 3B adds a compact formatting row to the Tiptap editor, with paragraph and
-heading styles, inline formatting, lists, quotes, code, and undo/redo. Document
-storage and real-time collaboration are not implemented yet. Refreshing the
-page clears the document.
+Phase 3C adds contextual inline formatting and link editing to the Tiptap
+editor. A separate document row provides paragraph/heading styles, lists,
+quotes, code, and undo/redo. Document storage and real-time collaboration are
+not implemented yet. Refreshing the page clears the document.
 
 ## Project overview
 
@@ -35,7 +35,8 @@ and a carefully designed interface.
 - Responsive workspace shell with sidebar collapse and system/light/dark themes.
 - Tiptap document body with paragraphs, H1–H3, emphasis, code, quotes, lists,
   horizontal rules, and undo/redo; accessible controls reflect selection state.
-- Safe link schema support; link editing UI, sharing, and commands remain deferred.
+- Selection controls for emphasis and safe link editing; sharing and commands
+  remain deferred.
 - pnpm workspace and a shared TypeScript configuration package.
 - ESLint, Prettier, and frontend CI checks.
 - Architecture, design direction, roadmap, and an editor engine decision record.
@@ -115,8 +116,9 @@ The pnpm scripts are the source of truth.
 
 **Tests:** `pnpm test` runs the web application's Vitest/jsdom tests for initial
 editor state, formatting commands and controls, history availability, safe link
-handling, and structured JSON round-tripping. Verify browser typing, selection,
-focus, themes, and responsive layout separately; jsdom does not model browser selection/layout faithfully.
+handling, selection eligibility/dismissal, and structured JSON round-tripping.
+Verify browser typing, selection, focus, themes, and responsive layout
+separately; jsdom does not model browser selection/layout faithfully.
 
 ## Project documentation
 

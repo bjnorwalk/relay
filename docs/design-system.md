@@ -35,8 +35,9 @@ CSS custom properties live in `apps/web/src/styles/tokens.css`. The shell uses
 `--surface-app`, `--surface-sidebar`, `--surface-document`, `--surface-hover`,
 `--surface-selected`, `--text-primary`, `--text-secondary`, `--text-disabled`,
 `--border-subtle`, `--accent`, and `--focus-ring`. Spacing, typography, control
-radius, layout dimensions, and transition timing also use tokens. There are no
-decorative shadows or elevations.
+radius, layout dimensions, and transition timing also use tokens. A raised
+surface and subtle popover shadow distinguish contextual tools; application
+chrome has no decorative elevation.
 
 Both palettes use the same token names through CSS `light-dark()` and
 `color-scheme`. System appearance is the default, including before hydration;
@@ -78,15 +79,28 @@ whole editor; other controls retain the global focus outline. Text selection
 uses the existing palette. Body H1 is intentionally smaller than the separate
 serif document title.
 
-The formatting row sits below the title and above the body, with a single subtle
-separator and no enclosing card. A native text-style select and grouped Lucide
-buttons wrap within the document width on narrow screens. Buttons expose their
-names, pressed state, and actual command availability. Native title hints label
-icon controls without a separate tooltip dependency. Tab traverses enabled
-controls normally; Enter/Space activates buttons and returns focus to the editor.
-The row displays no platform-specific shortcut labels. Standard editor shortcuts
-remain supplied by Tiptap. Links use the accent and an underline; link editing UI
-and floating selection controls are deferred.
+The block/history formatting row sits below the title and above the body, with a
+single subtle separator and no enclosing card. A native text-style select and
+grouped Lucide buttons wrap within the document width on narrow screens. Buttons
+expose their names, pressed state, and actual command availability. Native title
+hints label icon controls without a separate tooltip dependency. Tab traverses
+enabled controls normally; Enter/Space activates buttons and returns focus to
+the editor. The row displays no platform-specific shortcut labels. Standard
+editor shortcuts remain supplied by Tiptap. Links use the accent and an
+underline.
+
+Inline controls appear in a compact selection menu above meaningful editable
+text selections. They are hidden for collapsed cursors, whitespace-only or node
+selections, code blocks, read-only content, and focus outside the editor/menu.
+Bold, italic, strike, code, and link buttons expose pressed state. Tiptap
+positions the menu within the scrolling document and flips/shifts it near edges.
+The raised surface uses a restrained border, small radius, and subtle shadow.
+
+Tab reaches the selection menu and its buttons without a focus trap; activating
+formatting returns focus to the editor while preserving selection. Escape closes
+the link form first, then dismisses the menu for the current selection. A
+labeled URL field supports applying, editing, and removing a link, with an
+inline validation error for unsupported addresses. No browser prompt is used.
 
 Sidebar collapse preserves the toggle's focus and removes hidden navigation from
 keyboard traversal. The skip link focuses the document landmark. The native

@@ -2,8 +2,8 @@
 
 ## Current boundary
 
-Milestone 1, Phase 3B contains a Next.js App Router application, workspace shell,
-and single-user Tiptap editor foundation. It has no document storage,
+Milestone 1, Phase 3C contains a Next.js App Router application, workspace
+shell, and single-user Tiptap editor foundation. It has no document storage,
 authentication, or dedicated backend service.
 
 The pnpm workspace includes `apps/*` and `packages/*`. Packages are private and
@@ -62,13 +62,15 @@ There is no application-wide document state or custom editor lifecycle wrapper.
 
 `editor-config.ts` centralizes the initial JSON document, extensions, and
 accessible editor attributes. StarterKit supplies paragraphs, H1–H3, bold,
-italic, strike, inline code, code blocks, blockquotes, bullet/ordered lists, hard
-breaks, horizontal rules, and undo/redo. The document title stays separate from
-body headings. Underline remains disabled. Link support uses StarterKit's safe
-URI validation, with navigation, automatic linking, and plain-URL paste linking
-disabled; an intentional link-editing interaction is deferred. Placeholder
-comes from `@tiptap/extensions`, which StarterKit already uses. There are no
-custom nodes, extension registries, or collaboration extensions.
+italic, strike, inline code, code blocks, blockquotes, bullet/ordered lists,
+hard breaks, horizontal rules, and undo/redo. The document title stays separate
+from body headings. Underline remains disabled. Link support uses StarterKit's
+safe URI validation, with navigation, automatic linking, and plain-URL paste
+linking disabled. A selection URL form applies, updates, and removes links
+through the shared commands; it accepts explicit http, https, and mailto
+addresses. Placeholder comes from `@tiptap/extensions`, which StarterKit already
+uses. There are no custom nodes, extension registries, or collaboration
+extensions.
 
 Document content uses the editor's structured JSON representation. When
 persistence arrives, define and validate the storage envelope, including its
@@ -78,15 +80,24 @@ than inserting untrusted HTML.
 
 `formatting.ts` owns reusable actions and text-style changes. Its state selector
 reads active marks/blocks and command availability directly from the editor;
-capability checks do not dispatch document changes. `FormattingToolbar` alone
-subscribes through `useEditorState`, so cursor movement does not rerender the
+capability checks do not dispatch document changes. Both formatting surfaces
+subscribe through `useEditorState`, so cursor movement does not rerender the
 workspace or editor content. Pointer controls preserve selection and commands
 restore editor focus. The native text-style select keeps platform keyboard
-behavior. Future selection tools can reuse the same commands and state selector
-without depending on the current control row.
+behavior. `FormattingToolbar` retains block/history controls. `SelectionToolbar`
+reuses the same commands and state for inline controls and link editing.
 
-Task lists and link editing UI are deferred. Selection tools follow stable
-command behavior; slash commands follow a stable base editor.
+The selection toolbar uses Tiptap React's supported `BubbleMenu` integration,
+already included in the dependency graph. Its eligibility policy excludes
+collapsed, whitespace-only, node, read-only, and code-block selections. Focus
+may move into the menu without losing the document selection. Escape dismisses
+the current selection until it changes; leaving the editor/menu hides the tools.
+Floating UI positions against the document landmark, which scrolls independently
+of the window, with offset, flip, shift, and offscreen-reference hiding. The URL
+form requests a position update when its size changes. Tiptap owns plugin
+registration/cleanup; local UI state only tracks form visibility and dismissal.
+
+Task lists and slash commands remain deferred.
 
 ## Persistence direction
 
@@ -128,9 +139,10 @@ in the standard Next.js setup, while application code remains strictly checked.
 CI checks formatting, lint, types, available workspace tests, and production
 build. Vitest/jsdom tests exercise initial editor state, content updates,
 undo/redo, formatting commands/control state, structured JSON round-tripping,
-safe link handling, and exclusion of unsupported content.
-Browser checks verify rendering, hydration, selection/keyboard behavior, themes,
-and layout; jsdom is not a substitute for browser selection/layout testing.
+safe link handling, selection eligibility/dismissal, and exclusion of
+unsupported content. Browser checks verify rendering, hydration,
+selection/keyboard behavior, themes, and layout; jsdom is not a substitute for
+browser selection/layout testing.
 
 Future performance work will measure editor responsiveness, initial load,
 propagation latency, concurrent connections, reconstruction time, offline

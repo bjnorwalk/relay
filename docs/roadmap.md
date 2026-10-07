@@ -58,13 +58,21 @@ tests cover selection state, serialization, history, and incompatible formatting
 Safe link schema support is enabled; link editing UI and task lists are deferred.
 Content remains session-only.
 
-### Phase 3C: Contextual selection toolbar — next issue
+### Phase 3C: Contextual selection toolbar — complete
 
-Introduce selection tools after formatting commands are stable.
+Implemented selection-based inline controls and a safe link URL form, reusing
+the formatting command layer. The document row retains block/history controls.
+Selection policy, active states, dismissal, focus, scrolling, themes, and
+viewport bounds are validated. No persistence or synchronization is included.
 
-### Phase 3D: Keyboard behavior and shortcuts
+### Phase 3D: Keyboard behavior and shortcuts — proposed next issue
 
-Refine and test keyboard interaction before adding the slash command system.
+Standard shortcuts already come from Tiptap, and both formatting surfaces
+support keyboard focus. The next milestone should document that contract and add
+repeatable browser keyboard regression checks, with platform-appropriate hints
+on existing controls. See the [Phase 3D
+proposal](milestones/phase-3d-keyboard-behavior.md). Implementation awaits
+approval.
 
 ### Phase 4: Slash commands
 

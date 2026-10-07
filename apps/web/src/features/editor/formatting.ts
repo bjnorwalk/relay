@@ -15,6 +15,7 @@ const commands = {
   horizontalRule: (chain: ChainedCommands) => chain.setHorizontalRule(),
   undo: (chain: ChainedCommands) => chain.undo(),
   redo: (chain: ChainedCommands) => chain.redo(),
+  unlink: (chain: ChainedCommands) => chain.extendMarkRange('link').unsetLink(),
 };
 
 export type FormattingAction = keyof typeof commands;
@@ -28,6 +29,18 @@ export function setTextStyle(editor: Editor, style: TextStyle) {
   return style === 'paragraph'
     ? chain.setParagraph().run()
     : chain.setHeading({ level: headingLevels[style] }).run();
+}
+
+export function setDocumentLink(editor: Editor, address: string) {
+  const href = address.trim();
+  try {
+    const url = new URL(href);
+    if (!['http:', 'https:', 'mailto:'].includes(url.protocol)) return false;
+  } catch {
+    return false;
+  }
+  if (!editor.isEditable) return false;
+  return editor.chain().focus().extendMarkRange('link').setLink({ href }).run();
 }
 
 export function getFormattingState(editor: Editor) {
@@ -61,6 +74,10 @@ export function getFormattingState(editor: Editor) {
         editor.isEditable &&
         (editor.isActive('heading', { level: 3 }) ||
           editor.can().setHeading({ level: 3 })),
+    },
+    link: {
+      active: editor.isActive('link'),
+      enabled: editor.isEditable && editor.can().setMark('link'),
     },
     bold: actionState('bold'),
     italic: actionState('italic'),
