@@ -5,7 +5,7 @@ import '@fontsource-variable/geist';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Relay',
+  title: 'Slate',
   description:
     'A real-time workspace for writing, reviewing, and evolving documents together.',
 };

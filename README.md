@@ -1,8 +1,8 @@
-# Relay
+# Slate
 
 A real-time workspace for writing, reviewing, and evolving documents together.
 
-Relay starts with a single-user editor. The longer-term work is about what happens
+Slate starts with a single-user editor. The longer-term work is about what happens
 when a document changes: reviewing edits, comparing versions, and bringing work
 back together after people have edited separately.
 
@@ -16,7 +16,7 @@ The workspace has light and dark themes and a collapsible sidebar. Document
 switching and sharing are not available. Content is kept in memory, so refreshing
 the page clears it. Real-time collaboration and storage are still planned.
 
-[Open Relay](https://relay-hacks16.vercel.app). The production site follows `main`;
+[Open Slate](https://relay-hacks16.vercel.app). The production site follows `main`;
 open pull requests have separate previews.
 
 ## Run locally

@@ -16,7 +16,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
       <div className={styles.workspaceIdentity}>
         <div className={styles.brand}>
           <Copy aria-hidden="true" className={styles.brandIcon} />
-          <span>Relay</span>
+          <span>Slate</span>
         </div>
         <p className={styles.workspaceLabel}>Personal workspace</p>
       </div>

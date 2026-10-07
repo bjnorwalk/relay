@@ -1,5 +1,5 @@
 {
-  "name": "relay",
+  "name": "slate",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -9,9 +9,9 @@
     "pnpm": ">=10.34.6 <11"
   },
   "scripts": {
-    "dev": "pnpm --filter @relay/web dev",
+    "dev": "pnpm --filter @slate/web dev",
     "build": "pnpm --recursive --if-present build",
-    "start": "pnpm --filter @relay/web start",
+    "start": "pnpm --filter @slate/web start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "pnpm --recursive --if-present typecheck",
     "test": "pnpm --recursive --if-present test",

@@ -4,7 +4,7 @@
 
 ## Context
 
-Relay needs structured text, selection, undo/redo, and block commands. Building
+Slate needs structured text, selection, undo/redo, and block commands. Building
 these directly on browser editing primitives would take time away from document
 review and synchronization work. The first milestone is a single-user editor.
 
@@ -21,7 +21,7 @@ decision.
 
 ## Rationale
 
-Tiptap supplies commands and extensions while leaving the interface to Relay.
+Tiptap supplies commands and extensions while leaving the interface to Slate.
 ProseMirror provides the document schema, transactions, selections, and history.
 This lets the project start with normal editing behavior and add document-specific
 controls without owning the entire editing engine.
@@ -41,7 +41,7 @@ with the planned Go service; choosing an editor does not settle synchronization.
 
 Editor code needs a client component boundary. Package updates need extension
 compatibility checks, and schema changes need serialization and migration tests.
-Relay still owns accessible controls, keyboard interaction, and focus behavior.
+Slate still owns accessible controls, keyboard interaction, and focus behavior.
 Storage, synchronization, history, and branching remain separate decisions.
 
 ## References

@@ -1,6 +1,6 @@
 # Roadmap
 
-Relay is in early development. This sequence keeps changes small enough to
+Slate is in early development. This sequence keeps changes small enough to
 review and test separately. It may change as the implementation reveals new
 constraints; it is not a release schedule.
 

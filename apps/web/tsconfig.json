@@ -1,5 +1,5 @@
 {
-  "extends": "@relay/config/typescript/base.json",
+  "extends": "@slate/config/typescript/base.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,

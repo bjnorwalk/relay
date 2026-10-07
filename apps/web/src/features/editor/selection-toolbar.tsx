@@ -20,7 +20,7 @@ import { shouldShowSelectionToolbar } from './selection-toolbar-policy';
 import controlStyles from './formatting-toolbar.module.css';
 import styles from './selection-toolbar.module.css';
 
-const PLUGIN_KEY = 'relaySelectionToolbar';
+const PLUGIN_KEY = 'slateSelectionToolbar';
 const controls = [
   { action: 'bold', label: 'Bold', icon: Bold },
   { action: 'italic', label: 'Italic', icon: Italic },

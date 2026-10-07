@@ -2,7 +2,7 @@
 
 ## Current system
 
-Relay is a Next.js App Router application with a single-user Tiptap editor.
+Slate is a Next.js App Router application with a single-user Tiptap editor.
 Document content stays in the editor instance. Refreshing the page clears it.
 There is no document store, authentication, or dedicated backend service.
 
