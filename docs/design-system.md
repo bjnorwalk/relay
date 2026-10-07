@@ -2,9 +2,10 @@
 
 ## Status
 
-Phase 2 implements the workspace shell, semantic tokens, responsive layout, and
-system/light/dark appearance. Shared primitives remain local to the application;
-there is no shared component library yet.
+Phase 3A adds editable document typography to the Phase 2 workspace shell,
+semantic tokens, responsive layout, and system/light/dark appearance. Shared
+primitives remain local to the application; there is no shared component library
+yet.
 
 ## Principles
 
@@ -63,8 +64,17 @@ or focus trap. Header and status remain separate from the scrolling document.
 Home, sample document rows, Share, and Commands are native disabled buttons with
 explanatory labels or titles. Documents links to the current document landmark.
 The avatar is explicitly a user placeholder, without a presence indicator. The
-footer says **Preview · Not saved**; it does not claim persistence. The canvas
-contains static text and has no caret, text input, or contenteditable region.
+footer says **Session only · Not saved**; it does not claim persistence. The
+document title remains a static H1 above the editable body.
+
+The editor inherits the document body typography and readable column. H2–H4
+use restrained sans-serif headings; quotes use a subtle left rule; code uses a
+neutral surface and monospace type. Lists retain normal indentation and code
+blocks scroll within the column. An empty paragraph shows **Start writing…**.
+The writing surface has no input border or surrounding card. Keyboard focus
+uses a short accent rule in the left gutter rather than an outline around the
+whole editor; other controls retain the global focus outline. Text selection
+uses the existing palette.
 
 Sidebar collapse preserves the toggle's focus and removes hidden navigation from
 keyboard traversal. The skip link focuses the document landmark. The native

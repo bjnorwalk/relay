@@ -9,9 +9,10 @@ branching are first-class concepts rather than secondary tools.
 
 Early development. Current milestone: **Editor Foundation**.
 
-Phase 2 establishes the application shell: workspace navigation, a document
-preview, responsive layout, and light/dark appearance. Rich-text editing, local
-document storage, and real-time collaboration are not implemented yet.
+Phase 3A adds the Tiptap editor foundation to the workspace shell. Document
+content is editable with a small block/mark schema and built-in undo/redo.
+Formatting controls, document storage, and real-time collaboration are not
+implemented yet. Refreshing the page clears the document.
 
 ## Project overview
 
@@ -32,16 +33,17 @@ and a carefully designed interface.
 
 - Next.js App Router application with React and strict TypeScript.
 - Responsive workspace shell with sidebar collapse and system/light/dark themes.
-- Static document preview with explicitly unavailable sharing and commands.
+- Tiptap document body with paragraphs, H2–H4, emphasis, code, quotes, lists,
+  horizontal rules, and undo/redo; sharing and commands remain unavailable.
 - pnpm workspace and a shared TypeScript configuration package.
 - ESLint, Prettier, and frontend CI checks.
 - Architecture, design direction, roadmap, and an editor engine decision record.
 
 ## Architecture direction
 
-The web application will own presentation and feature-level interaction. Tiptap,
-built on ProseMirror, is the selected editor engine; installation is deferred
-until the editor foundation phase.
+The web application owns presentation and feature-level interaction. Tiptap,
+built on ProseMirror, owns editor state within `features/editor`. The document
+title remains separate from the editor body.
 
 Later milestones may introduce a Go real-time service, WebSocket transport, Yjs,
 Redis, PostgreSQL, and object storage. These are planned boundaries, not current
@@ -55,7 +57,7 @@ relay/
 ├── apps/web/                  # Next.js application
 │   └── src/
 │       ├── app/               # Routes and root layout
-│       ├── features/          # Workspace shell and document canvas
+│       ├── features/          # Workspace shell, document canvas, and editor
 │       └── styles/            # Semantic tokens and global styles
 ├── packages/config/           # Shared TypeScript settings
 ├── docs/
@@ -110,10 +112,10 @@ do not commit populated `.env` files.
 The Makefile provides equivalent convenience targets, including `make check`.
 The pnpm scripts are the source of truth.
 
-**Tests:** There are no committed behavior test suites yet. `pnpm test` dispatches
-to no suites; it does not demonstrate test coverage. Editor behavior tests and
-browser keyboard tests will be added alongside the relevant features. CI already
-invokes the workspace test dispatcher.
+**Tests:** `pnpm test` runs the web application's Vitest/jsdom tests for initial
+editor state, content updates, undo/redo, schema boundaries, and structured JSON
+round-tripping. Verify browser typing, selection, focus, themes, and responsive
+layout separately; jsdom does not model browser selection/layout faithfully.
 
 ## Project documentation
 

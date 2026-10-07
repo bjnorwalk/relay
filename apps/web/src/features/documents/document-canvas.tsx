@@ -1,3 +1,5 @@
+import { DocumentEditor } from '../editor/editor';
+
 import styles from './document-canvas.module.css';
 
 export function DocumentCanvas({ title }: { title: string }) {
@@ -7,8 +9,7 @@ export function DocumentCanvas({ title }: { title: string }) {
         {title}
       </h1>
       <div className={styles.content}>
-        <p className={styles.placeholder}>Start writing…</p>
-        <p className={styles.previewNote}>Editing arrives in the next phase.</p>
+        <DocumentEditor />
       </div>
     </article>
   );

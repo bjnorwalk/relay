@@ -2,8 +2,8 @@
 
 ## Current boundary
 
-Milestone 1, Phase 2 contains a Next.js App Router application, a mostly static
-workspace shell, and repository tooling. It has no document editor, data storage,
+Milestone 1, Phase 3A contains a Next.js App Router application, workspace shell,
+and single-user Tiptap editor foundation. It has no document storage,
 authentication, or dedicated backend service.
 
 The pnpm workspace includes `apps/*` and `packages/*`. Packages are private and
@@ -31,9 +31,10 @@ future editor. Global baseline styles live in `src/styles`.
 
 The route composes `features/workspaces/WorkspaceShell` around a server-rendered
 `features/documents/DocumentCanvas`. Shell components and their CSS module stay
-in the workspace feature. Only sidebar visibility and appearance require local
-client state. Neither preference nor document content is persisted. Geist is
-self-hosted through its font package; Lucide supplies the outline icons.
+in the workspace feature. Sidebar visibility and appearance use local client
+state; the editor owns its own state. Neither preferences nor content are
+persisted. Geist is self-hosted through its font package; Lucide supplies the
+outline icons.
 
 Create feature directories only as their behavior arrives:
 
@@ -52,20 +53,29 @@ actually shared. Do not create empty feature modules or generic service layers.
 
 ## Editor direction
 
-[ADR 0001](adr/0001-editor-engine.md) selects Tiptap over ProseMirror. The editor
-will be a client-side feature with a deliberately small extension set. Keep
-editor instance state inside the editor boundary and avoid broadcasting every
-keystroke through application-wide React state.
+[ADR 0001](adr/0001-editor-engine.md) selects Tiptap, built on ProseMirror.
+`features/editor/editor.tsx` is the editor's client boundary, mounted inside the
+server-rendered document canvas. `useEditor` manages instance creation/cleanup;
+`immediatelyRender: false` defers initialization until after hydration, and
+`shouldRerenderOnTransaction: false` avoids React rerenders for each keystroke.
+There is no application-wide document state or custom editor lifecycle wrapper.
 
-Document content will use the editor's structured JSON representation. When
+`editor-config.ts` centralizes the initial JSON document, extensions, and
+accessible editor attributes. StarterKit supplies paragraphs, H2–H4, bold,
+italic, strike, inline code, code blocks, blockquotes, bullet/ordered lists, hard
+breaks, horizontal rules, and undo/redo. H1 belongs to the separate document
+title. StarterKit's link and underline extensions are disabled. Placeholder
+comes from `@tiptap/extensions`, which StarterKit already uses. There are no
+custom nodes, extension registries, or collaboration extensions.
+
+Document content uses the editor's structured JSON representation. When
 persistence arrives, define and validate the storage envelope, including its
 schema version, before accepting saved content. The exact persistence types are
 deferred until implementation. Render content through the editor/schema rather
 than inserting untrusted HTML.
 
-Initial support will include paragraphs, headings, emphasis, code, quotes, lists,
-tasks, links, and undo/redo. Selection tools follow stable command behavior;
-slash commands follow a stable base editor. Tiptap is not installed in Phase 1.
+Formatting controls, links, and task lists follow this foundation. Selection
+tools follow stable command behavior; slash commands follow a stable base editor.
 
 ## Persistence direction
 
@@ -105,8 +115,10 @@ properties. ESLint enforces the Next.js recommendations and rejects explicit
 in the standard Next.js setup, while application code remains strictly checked.
 
 CI checks formatting, lint, types, available workspace tests, and production
-build. There are no behavior suites yet. Add tests with editor serialization and
-commands, then browser selection/keyboard behavior and local persistence.
+build. Vitest/jsdom tests exercise initial editor state, content updates,
+undo/redo, structured JSON round-tripping, and exclusion of unsupported content.
+Browser checks verify rendering, hydration, selection/keyboard behavior, themes,
+and layout; jsdom is not a substitute for browser selection/layout testing.
 
 Future performance work will measure editor responsiveness, initial load,
 propagation latency, concurrent connections, reconstruction time, offline

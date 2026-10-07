@@ -13,8 +13,8 @@ export function StatusBar() {
         <span>Commands</span>
         <kbd aria-hidden="true">⌘ K</kbd>
       </button>
-      <span title="Static preview. Document content is not persisted.">
-        Preview <span aria-hidden="true">·</span> Not saved
+      <span title="Changes exist only in this tab and are lost on refresh.">
+        Session only <span aria-hidden="true">·</span> Not saved
       </span>
     </footer>
   );
