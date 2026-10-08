@@ -1,0 +1,29 @@
+.notice {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border-left: 2px solid var(--accent);
+  background: var(--surface-sidebar);
+  color: var(--text-primary);
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+.notice p {
+  margin: 0 0 var(--space-3);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.actions button {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--surface-document);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+.actions button:hover {
+  background: var(--surface-hover);
+}

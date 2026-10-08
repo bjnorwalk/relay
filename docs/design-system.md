@@ -64,9 +64,18 @@ active state.
 ## Unavailable controls
 
 Home, sample documents, Share, and Commands are disabled with explanatory labels
-or titles. The avatar is a placeholder, not a presence indicator. The footer says
-**Session only · Not saved** because there is no persistence yet. The document
-title is a static H1 above the editable body.
+or titles. The avatar is a placeholder, not a presence indicator. The document title is a static H1 above the editable body.
+
+## Save feedback
+
+The footer reports **Opening document…**, **Not saved yet**, **Saving…**,
+**Saved locally**, or **Couldn’t save** in a polite status region. “Saved locally”
+means a browser write succeeded; it does not imply server storage or a backup.
+
+A failed save or restore adds a short recovery notice below the title. It uses
+existing surface, border, and focus tokens. The notice explains what remains
+in memory and offers Download draft, with Retry save for failed writes and
+Download saved data for an unreadable record. Actions wrap on narrow screens.
 
 ## Component ownership
 
