@@ -13,8 +13,16 @@ inline code, lists, quotes, code blocks, links, horizontal rules, and undo/redo.
 Block controls sit above the document. Selecting text opens inline controls.
 
 The workspace has light and dark themes and a collapsible sidebar. Document
-switching and sharing are not available. Content is kept in memory, so refreshing
-the page clears it. Real-time collaboration and storage are still planned.
+switching and sharing are not available. The current document is saved in this browser after a short pause in typing and
+restored on refresh. This is local storage, not cloud sync. Clearing site data
+removes it, and each browser and site address has its own copy. Real-time
+collaboration and server storage are still planned.
+
+The footer shows the actual save state. If storage is unavailable, a write fails,
+or saved data cannot be restored, a recovery notice offers a draft download.
+Unreadable records are left untouched. Another tab changing the saved record
+stops autosave; download the current draft before reloading. The title is saved
+with the document but remains a static heading in this phase.
 
 [Open Slate](https://relay-hacks16.vercel.app). The production site follows `main`;
 open pull requests have separate previews.
@@ -46,7 +54,7 @@ introduced, and keep populated `.env` files out of Git.
 | `pnpm build`        | Create a production build                     |
 
 The Makefile provides the same checks. Tests cover editor content, formatting,
-selection state, links, and undo/redo. Browser checks are also needed for native
+selection state, links, undo/redo, and local save/recovery behavior. Browser checks are also needed for native
 selection, keyboard focus, and layout; jsdom cannot reproduce those fully.
 
 ## Repository

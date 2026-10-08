@@ -2,6 +2,8 @@
 
 import { EditorContent, useEditor } from '@tiptap/react';
 
+import { useLocalAutosave } from '../documents/use-local-autosave';
+
 import { FormattingToolbar } from './formatting-toolbar';
 import { SelectionToolbar } from './selection-toolbar';
 import { editorOptions } from './editor-config';
@@ -10,9 +12,12 @@ import styles from './editor.module.css';
 export function DocumentEditor() {
   const editor = useEditor({
     ...editorOptions,
+    editable: false,
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
   });
+
+  useLocalAutosave(editor);
 
   return (
     <>

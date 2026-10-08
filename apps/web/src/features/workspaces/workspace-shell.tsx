@@ -9,11 +9,10 @@ import { StatusBar } from './status-bar';
 import styles from './workspace-shell.module.css';
 
 type WorkspaceShellProps = {
-  title: string;
   children: ReactNode;
 };
 
-export function WorkspaceShell({ title, children }: WorkspaceShellProps) {
+export function WorkspaceShell({ children }: WorkspaceShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -23,7 +22,6 @@ export function WorkspaceShell({ title, children }: WorkspaceShellProps) {
       </a>
       <Sidebar collapsed={sidebarCollapsed} />
       <DocumentHeader
-        title={title}
         sidebarCollapsed={sidebarCollapsed}
         onToggleSidebar={() => setSidebarCollapsed((collapsed) => !collapsed)}
       />

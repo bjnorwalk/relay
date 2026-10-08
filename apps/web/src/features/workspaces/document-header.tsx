@@ -1,15 +1,15 @@
 import { PanelLeftClose, PanelLeftOpen, Upload } from 'lucide-react';
 
+import { DocumentTitle } from '../documents/document-provider';
+
 import styles from './workspace-shell.module.css';
 
 type DocumentHeaderProps = {
-  title: string;
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
 };
 
 export function DocumentHeader({
-  title,
   sidebarCollapsed,
   onToggleSidebar,
 }: DocumentHeaderProps) {
@@ -33,7 +33,9 @@ export function DocumentHeader({
         <span className={styles.breadcrumbSeparator} aria-hidden="true">
           /
         </span>
-        <span className={styles.breadcrumbTitle}>{title}</span>
+        <span className={styles.breadcrumbTitle}>
+          <DocumentTitle />
+        </span>
       </div>
       <div className={styles.headerActions}>
         <button

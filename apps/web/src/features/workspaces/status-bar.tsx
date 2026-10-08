@@ -1,3 +1,4 @@
+import { SaveStatus } from '../documents/save-status';
 import styles from './workspace-shell.module.css';
 
 export function StatusBar() {
@@ -13,9 +14,7 @@ export function StatusBar() {
         <span>Commands</span>
         <kbd aria-hidden="true">⌘ K</kbd>
       </button>
-      <span title="Changes exist only in this tab and are lost on refresh.">
-        Session only <span aria-hidden="true">·</span> Not saved
-      </span>
+      <SaveStatus />
     </footer>
   );
 }

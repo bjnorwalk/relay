@@ -6,16 +6,18 @@ constraints; it is not a release schedule.
 
 ## Editor foundation
 
-| Phase                  | Status      | Result                                                                   |
-| ---------------------- | ----------- | ------------------------------------------------------------------------ |
-| 1 — Repository         | Implemented | pnpm workspace, strict TypeScript, checks, docs, and CI                  |
-| 2 — Workspace shell    | Implemented | Document canvas, navigation, themes, and responsive layout               |
-| 3A — Editor            | Implemented | Tiptap schema, placeholder, document typography, and tests               |
-| 3B — Formatting        | Implemented | Shared commands, block controls, active state, and undo/redo             |
-| 3C — Selection toolbar | Implemented | Inline controls, link editing, selection/focus behavior, and positioning |
+| Phase                       | Status      | Result                                                                   |
+| --------------------------- | ----------- | ------------------------------------------------------------------------ |
+| 1 — Repository              | Implemented | pnpm workspace, strict TypeScript, checks, docs, and CI                  |
+| 2 — Workspace shell         | Implemented | Document canvas, navigation, themes, and responsive layout               |
+| 3A — Editor                 | Implemented | Tiptap schema, placeholder, document typography, and tests               |
+| 3B — Formatting             | Implemented | Shared commands, block controls, active state, and undo/redo             |
+| 3C — Selection toolbar      | Implemented | Inline controls, link editing, selection/focus behavior, and positioning |
+| Local autosave and recovery | Implemented | One browser-local document, accurate save status, and recovery actions   |
 
-The editor is single-user and session-only. Refresh clears its content. Sharing,
-document switching, and command controls are not available.
+Local autosave was moved ahead of keyboard refinement because refresh recovery
+is needed for ordinary writing. The editor now restores one browser-local
+document. Sharing, document switching, and command controls are not available.
 
 ## Next: keyboard behavior and shortcuts
 
@@ -32,9 +34,9 @@ reproducible problem calls for it.
 
 1. **Slash commands:** block insertion and conversion, with filtering, keyboard
    navigation, selection preservation, and focus return.
-2. **Local documents and persistence:** document identity, switching, storage,
-   and save status. Test reloads, malformed data, unavailable storage, and failed
-   writes. A command palette can follow once document actions exist.
+2. **Multiple local documents:** add document identity, creation, and switching
+   on top of the current storage boundary. Preserve recovery and failed-write
+   handling. A command palette can follow once document actions exist.
 
 ## Later work
 
