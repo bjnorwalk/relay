@@ -40,15 +40,17 @@ describe('formatting controls', () => {
   it('formats the selection and updates pressed/history state', async () => {
     expect(button('Undo').disabled).toBe(true);
     await act(async () => editor.commands.setTextSelection({ from: 1, to: 5 }));
-    await act(async () => button('Bold').click());
-    expect(editor.getHTML()).toBe('<p><strong>Some</strong> text</p>');
-    expect(button('Bold').getAttribute('aria-pressed')).toBe('true');
+    await act(async () => button('Blockquote').click());
+    expect(editor.getHTML()).toBe(
+      '<blockquote><p>Some text</p></blockquote><p></p>',
+    );
+    expect(button('Blockquote').getAttribute('aria-pressed')).toBe('true');
     expect(button('Undo').disabled).toBe(false);
     await act(async () => button('Undo').click());
     expect(editor.getHTML()).toBe('<p>Some text</p>');
     expect(button('Redo').disabled).toBe(false);
     await act(async () => button('Redo').click());
-    expect(button('Bold').getAttribute('aria-pressed')).toBe('true');
+    expect(button('Blockquote').getAttribute('aria-pressed')).toBe('true');
   });
 
   it('updates the text-style control as the cursor moves between blocks', async () => {
@@ -62,11 +64,10 @@ describe('formatting controls', () => {
     expect(select?.value).toBe('paragraph');
   });
 
-  it('disables incompatible mark controls inside a code block', async () => {
+  it('reflects code-block state without duplicating inline controls', async () => {
     await act(async () => button('Code block').click());
     expect(button('Code block').getAttribute('aria-pressed')).toBe('true');
-    expect(button('Bold').disabled).toBe(true);
-    expect(button('Italic').disabled).toBe(true);
+    expect(container.querySelector('button[aria-label="Bold"]')).toBeNull();
     expect(
       container.querySelector<HTMLOptionElement>('option[value="other"]')
         ?.disabled,

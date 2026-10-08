@@ -3,16 +3,12 @@
 import type { Editor } from '@tiptap/core';
 import { useEditorState } from '@tiptap/react';
 import {
-  Bold,
-  Code,
-  Italic,
   List,
   ListOrdered,
   Minus,
   Quote,
   Redo2,
   SquareCode,
-  Strikethrough,
   Undo2,
 } from 'lucide-react';
 
@@ -28,12 +24,6 @@ const groups = [
   [
     { action: 'undo', label: 'Undo', icon: Undo2 },
     { action: 'redo', label: 'Redo', icon: Redo2 },
-  ],
-  [
-    { action: 'bold', label: 'Bold', icon: Bold },
-    { action: 'italic', label: 'Italic', icon: Italic },
-    { action: 'strike', label: 'Strikethrough', icon: Strikethrough },
-    { action: 'code', label: 'Inline code', icon: Code },
   ],
   [
     { action: 'bulletList', label: 'Bullet list', icon: List },

@@ -2,7 +2,12 @@ import { Editor } from '@tiptap/core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { editorOptions } from './editor-config';
-import { getFormattingState, runFormatting, setTextStyle } from './formatting';
+import {
+  getFormattingState,
+  runFormatting,
+  setTextStyle,
+  setDocumentLink,
+} from './formatting';
 
 describe('formatting commands', () => {
   let editor: Editor;
@@ -93,6 +98,26 @@ describe('formatting commands', () => {
     expect(getFormattingState(editor).textStyle).toBe('other');
     expect(editor.getJSON()).toEqual(before);
   });
+
+  it('applies, updates, and removes a link while preserving selected text', () => {
+    expect(setDocumentLink(editor, ' https://example.com/notes ')).toBe(true);
+    expect(getFormattingState(editor).link.active).toBe(true);
+    expect(editor.getText()).toBe('Selected words');
+    expect(editor.getAttributes('link').href).toBe('https://example.com/notes');
+    expect(setDocumentLink(editor, 'mailto:writer@example.com')).toBe(true);
+    expect(editor.getAttributes('link').href).toBe('mailto:writer@example.com');
+    expect(runFormatting(editor, 'unlink')).toBe(true);
+    expect(editor.getHTML()).toBe('<p>Selected words</p>');
+  });
+
+  it.each(['javascript:alert(1)', 'data:text/html,test', 'not a URL', ''])(
+    'rejects %s without changing the document',
+    (address) => {
+      const before = editor.getJSON();
+      expect(setDocumentLink(editor, address)).toBe(false);
+      expect(editor.getJSON()).toEqual(before);
+    },
+  );
 
   it('disables commands for a read-only document', () => {
     editor.setEditable(false);

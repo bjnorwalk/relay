@@ -1,0 +1,63 @@
+.menu {
+  z-index: var(--layer-popover);
+  max-width: calc(100vw - var(--space-6));
+  padding: var(--space-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-popover);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.linkEditor {
+  display: grid;
+  gap: var(--space-2);
+  width: 17rem;
+  max-width: 100%;
+  padding: var(--space-2);
+  margin-top: var(--space-1);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.linkRow {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.linkEditor input {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--surface-document);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.linkEditor p {
+  margin: 0;
+}
+
+.textButton {
+  min-height: var(--control-height);
+  padding-inline: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.textButton:hover {
+  background: var(--surface-hover);
+}

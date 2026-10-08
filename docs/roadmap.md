@@ -1,98 +1,50 @@
 # Roadmap
 
-Relay is in early development. Milestones define scope, not promised release dates.
+Slate is in early development. This sequence keeps changes small enough to
+review and test separately. It may change as the implementation reveals new
+constraints; it is not a release schedule.
 
-## Milestone 1: Editor Foundation
+## Editor foundation
 
-### Phase 1: Repository foundation
+| Phase                  | Status      | Result                                                                   |
+| ---------------------- | ----------- | ------------------------------------------------------------------------ |
+| 1 — Repository         | Implemented | pnpm workspace, strict TypeScript, checks, docs, and CI                  |
+| 2 — Workspace shell    | Implemented | Document canvas, navigation, themes, and responsive layout               |
+| 3A — Editor            | Implemented | Tiptap schema, placeholder, document typography, and tests               |
+| 3B — Formatting        | Implemented | Shared commands, block controls, active state, and undo/redo             |
+| 3C — Selection toolbar | Implemented | Inline controls, link editing, selection/focus behavior, and positioning |
 
-- [x] pnpm workspace and pinned toolchain.
-- [x] Next.js App Router with strict TypeScript.
-- [x] ESLint, Prettier, EditorConfig, and root scripts.
-- [x] Project, contribution, architecture, and design documentation.
-- [x] Editor engine ADR and frontend CI configuration.
-- [x] Minimal page suitable for production build validation.
+The editor is single-user and session-only. Refresh clears its content. Sharing,
+document switching, and command controls are not available.
 
-The foundation is pushed to GitHub with frontend CI. No editor UI or editor
-behavior is included in this phase.
+## Next: keyboard behavior and shortcuts
 
-### Phase 2: Application shell — complete
+Standard shortcuts already come from Tiptap. The next small change is to document
+that behavior and add repeatable browser tests for formatting/history shortcuts,
+selection, Tab and Escape, link submission, lists, soft breaks, and code-block
+exit. Existing controls should show platform-appropriate shortcut hints.
 
-**Issue: Build the Relay application/editor shell.**
+This work stays in the editor feature. It does not add another command surface,
+new document nodes, or storage. Native behavior should be changed only when a
+reproducible problem calls for it.
 
-Acceptance criteria:
+## Following work
 
-- Establish semantic design tokens and light/dark themes.
-- Compose a minimal sidebar, document header, document canvas, and status area.
-- Preserve a comfortable document width and prioritize editing space on mobile.
-- Provide semantic landmarks, labeled controls, and visible keyboard focus.
-- Give every visible control real behavior; defer share, presence, and save
-  indicators that have no implemented operation behind them.
-- Keep feature ownership clear and pass formatting, lint, typecheck, and build.
+1. **Slash commands:** block insertion and conversion, with filtering, keyboard
+   navigation, selection preservation, and focus return.
+2. **Local documents and persistence:** document identity, switching, storage,
+   and save status. Test reloads, malformed data, unavailable storage, and failed
+   writes. A command palette can follow once document actions exist.
 
-Implemented a static document preview, responsive workspace navigation, sidebar
-collapse, semantic tokens, self-hosted typography, and system/light/dark themes.
-Sharing, sample document switching, Home, and Commands are explicitly disabled;
-the status area does not claim that content is saved.
+## Later work
 
-The shell does not include Tiptap, persistence, comments, presence, or backend
-integration. Validate its responsive and keyboard behavior before Phase 3.
+- A Go real-time service and an evaluated synchronization protocol.
+- Offline editing and reconnection, including concurrent changes and recovery.
+- Comments, presence, permissions, and sharing.
+- Visual document history, diffs, and restoration.
+- Document branching, comparison, and merge review.
+- Load testing, synchronization metrics, and measured performance work.
 
-### Phase 3A: Tiptap editor foundation — complete
-
-**Issue: Integrate the single-user Tiptap editor foundation.**
-
-Implemented an empty editable document body in `features/editor`, with a
-centralized StarterKit configuration, placeholder, document typography, narrow
-client boundary, and focused state/history/serialization tests. The title is
-separate. Content lives only in the editor instance and resets on refresh.
-
-### Phase 3B: Rich-text formatting system — complete
-
-**Issue: Add accessible formatting controls to the single-user editor.**
-
-Implemented reusable commands, a compact formatting row, paragraph/H1–H3 styles,
-inline marks, list/quote/code controls, horizontal rules, and undo/redo. Controls
-derive active and disabled state from Tiptap. Command and representative control
-tests cover selection state, serialization, history, and incompatible formatting.
-Safe link schema support is enabled; link editing UI and task lists are deferred.
-Content remains session-only.
-
-### Phase 3C: Contextual selection toolbar — next issue
-
-Introduce selection tools after formatting commands are stable.
-
-### Phase 3D: Keyboard behavior and shortcuts
-
-Refine and test keyboard interaction before adding the slash command system.
-
-### Phase 4: Slash commands
-
-Add a polished block command interface with filtering and mandatory keyboard
-navigation. Test filtering, active-item movement, command execution, Escape,
-selection preservation, and focus return.
-
-### Phase 5: Local persistence
-
-Persist document content across reloads through a small document feature
-boundary. Test serialization, restore, malformed data, unavailable storage, and
-failed writes. Save status must reflect real outcomes. Keep storage simple and
-prepare for later synchronization without building it yet.
-
-## Later milestones
-
-Sequence and contracts remain subject to architecture decisions:
-
-1. Real-time coauthoring: synchronization model, Go/WebSocket interoperability,
-   collaborator presence and selections.
-2. Offline editing and reconnection: automatic recovery, concurrent updates,
-   durable acknowledgement, and failure testing.
-3. Review workflows: comments, permissions, and share links.
-4. Visual document history: snapshots, diffs, and restoration.
-5. Document branching: comparison, merge review, and explicit conflict semantics.
-6. Operational quality: observable synchronization metrics, load tests, and
-   documented performance measurements.
-
-Authentication, Yjs, WebSockets, Redis, PostgreSQL, object storage, and backend
-services are outside Milestone 1. Introduce each only with a concrete need and
-an explicit boundary. Never publish performance numbers without benchmarks.
+Authentication, Yjs, WebSockets, Redis, PostgreSQL, and object storage belong to
+later work. Their contracts and failure behavior need decisions before they
+become dependencies. Performance claims will need benchmarks.
