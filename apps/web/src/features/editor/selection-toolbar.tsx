@@ -18,6 +18,8 @@ import { getFormattingState, runFormatting } from './formatting';
 import { LinkEditor } from './link-editor';
 import { shouldShowSelectionToolbar } from './selection-toolbar-policy';
 import controlStyles from './formatting-toolbar.module.css';
+import { formattingShortcut } from './keyboard-shortcuts';
+import { useKeyboardPlatform } from './use-keyboard-platform';
 import styles from './selection-toolbar.module.css';
 
 const PLUGIN_KEY = 'slateSelectionToolbar';
@@ -29,6 +31,7 @@ const controls = [
 ] as const;
 
 export function SelectionToolbar({ editor }: { editor: Editor }) {
+  const platform = useKeyboardPlatform();
   const state = useEditorState({
     editor,
     selector: ({ editor: current }) => getFormattingState(current),
@@ -91,6 +94,10 @@ export function SelectionToolbar({ editor }: { editor: Editor }) {
       hide: { boundary },
       scrollTarget: scroller ?? window,
       onHide: closeLink,
+      onShow: () => {
+        // BubbleMenu adds a container tab stop; its buttons already provide access.
+        if (menu.current) menu.current.tabIndex = -1;
+      },
     };
   }, [closeLink]);
 
@@ -128,20 +135,24 @@ export function SelectionToolbar({ editor }: { editor: Editor }) {
     >
       <div role="group" aria-label="Text formatting">
         <div className={styles.row}>
-          {controls.map(({ action, label, icon: Icon }) => (
-            <button
-              key={action}
-              type="button"
-              className={controlStyles.button}
-              aria-label={label}
-              title={label}
-              aria-pressed={state[action].active}
-              disabled={!state[action].enabled}
-              onClick={() => runFormatting(editor, action)}
-            >
-              <Icon aria-hidden="true" />
-            </button>
-          ))}
+          {controls.map(({ action, label, icon: Icon }) => {
+            const shortcut = formattingShortcut(action, platform);
+            return (
+              <button
+                key={action}
+                type="button"
+                className={controlStyles.button}
+                aria-label={label}
+                title={shortcut ? `${label} (${shortcut.label})` : label}
+                aria-keyshortcuts={shortcut?.aria}
+                aria-pressed={state[action].active}
+                disabled={!state[action].enabled}
+                onClick={() => runFormatting(editor, action)}
+              >
+                <Icon aria-hidden="true" />
+              </button>
+            );
+          })}
           <button
             type="button"
             className={controlStyles.button}

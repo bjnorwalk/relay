@@ -19,16 +19,18 @@ Local autosave was moved ahead of keyboard refinement because refresh recovery
 is needed for ordinary writing. The editor now restores one browser-local
 document. Sharing, document switching, and command controls are not available.
 
-## Next: keyboard behavior and shortcuts
+## Keyboard behavior and shortcuts
 
-Standard shortcuts already come from Tiptap. The next small change is to document
-that behavior and add repeatable browser tests for formatting/history shortcuts,
-selection, Tab and Escape, link submission, lists, soft breaks, and code-block
-exit. Existing controls should show platform-appropriate shortcut hints.
+Phase 3D adds platform-aware shortcut hints and Chromium tests for the existing
+editor bindings, selection, focus, links, and block editing. See
+[Keyboard editing](keyboard-behavior.md). It introduces no additional document
+nodes or storage behavior.
 
-This work stays in the editor feature. It does not add another command surface,
-new document nodes, or storage. Native behavior should be changed only when a
-reproducible problem calls for it.
+## Next: slash commands
+
+Block insertion and conversion need a focused menu with filtering, keyboard
+navigation, selection preservation, and focus return. This remains separate from
+the workspace command palette and document switching.
 
 ## Following work
 

@@ -51,7 +51,9 @@ returns focus to the editor and preserves the selected text.
 Escape closes the URL form first, then dismisses the selection menu. The link
 form has a labeled field, Apply and Remove controls, and an inline error for
 unsupported addresses. Links use the accent color and an underline. Standard
-editor shortcuts remain supplied by Tiptap.
+editor shortcuts remain supplied by Tiptap. Button title hints and
+`aria-keyshortcuts` use the platform modifier. See [Keyboard editing](keyboard-behavior.md)
+for bindings and focus behavior.
 
 ## Focus and motion
 

@@ -17,7 +17,8 @@
     "test": "pnpm --recursive --if-present test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "test:browser": "pnpm --filter @slate/web test:browser"
   },
   "devDependencies": {
     "eslint": "9.39.5",

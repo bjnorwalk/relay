@@ -18,6 +18,8 @@ import {
   setTextStyle,
   type TextStyle,
 } from './formatting';
+import { formattingShortcut } from './keyboard-shortcuts';
+import { useKeyboardPlatform } from './use-keyboard-platform';
 import styles from './formatting-toolbar.module.css';
 
 const groups = [
@@ -42,6 +44,7 @@ const textStyles = [
 ] as const;
 
 export function FormattingToolbar({ editor }: { editor: Editor }) {
+  const platform = useKeyboardPlatform();
   const state = useEditorState({
     editor,
     selector: ({ editor: current }) => getFormattingState(current),
@@ -77,13 +80,15 @@ export function FormattingToolbar({ editor }: { editor: Editor }) {
         <div className={styles.group} key={group[0].action}>
           {group.map(({ action, label, icon: Icon }) => {
             const toggle = !['undo', 'redo', 'horizontalRule'].includes(action);
+            const shortcut = formattingShortcut(action, platform);
             return (
               <button
                 key={action}
                 type="button"
                 className={styles.button}
                 aria-label={label}
-                title={label}
+                title={shortcut ? `${label} (${shortcut.label})` : label}
+                aria-keyshortcuts={shortcut?.aria}
                 aria-pressed={toggle ? state[action].active : undefined}
                 disabled={!state[action].enabled}
                 onMouseDown={(event) => {
