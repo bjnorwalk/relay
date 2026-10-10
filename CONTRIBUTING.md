@@ -45,3 +45,10 @@ local configuration, or build output.
 Include reproduction steps, expected and actual behavior, browser, operating
 system, and the commit or version tested. Remove private content from examples.
 For a feature request, explain the problem it would solve and its scope.
+
+## Browser checks
+
+After `pnpm build`, run `pnpm test:browser`. Install Chromium first with
+`pnpm --filter @slate/web exec playwright install chromium`. The suite starts a
+production server on port 3101 and uses isolated browser storage. Keep that port
+free. See [Keyboard editing](docs/keyboard-behavior.md) for the current contract.

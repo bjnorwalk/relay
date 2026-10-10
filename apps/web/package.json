@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@fontsource-variable/geist": "5.3.0",
@@ -23,6 +24,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.0",
     "@slate/config": "workspace:*",
     "@types/node": "24.19.1",
     "@types/react": "19.3.0",

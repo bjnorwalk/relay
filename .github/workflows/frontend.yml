@@ -51,3 +51,9 @@ jobs:
 
       - name: Build production application
         run: pnpm build
+
+      - name: Install browser test runtime
+        run: pnpm --filter @slate/web exec playwright install --with-deps chromium
+
+      - name: Test keyboard behavior in Chromium
+        run: pnpm test:browser
